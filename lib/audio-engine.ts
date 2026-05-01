@@ -603,7 +603,8 @@ export class AudioEngine {
     // Reconnect tap node port to existing visualizer worker if canvas was attached
     if (this.attachedCanvas && this.tapNode && this.visWorker) {
       const channel = new MessageChannel();
-      this.tapNode!.port.postMessage({ type: 'setup_port', port: channel.port1 }, [channel.port1]);
+      const tapNode = this.tapNode as AudioWorkletNode;
+      tapNode.port.postMessage({ type: 'setup_port', port: channel.port1 }, [channel.port1]);
       this.visWorker.postMessage({ type: 'setup_port', port: channel.port2 }, [channel.port2]);
     }
   }
