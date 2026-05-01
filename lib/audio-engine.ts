@@ -434,6 +434,7 @@ export class AudioEngine {
   private stereoPanner: StereoPannerNode | null = null;
   public tapNode: AudioWorkletNode | null = null;
   private visWorker: Worker | null = null;
+  private attachedCanvas: HTMLCanvasElement | null = null;
 
   // OS Bypass Sample Rate status
   public actualSampleRate: number = 0;
@@ -598,6 +599,10 @@ export class AudioEngine {
     this.gainBMakeup = null;
 
     await this.initialize(audioElement, true);
+
+    if (this.attachedCanvas) {
+      this.attachVisualizer(this.attachedCanvas);
+    }
   }
 
   public async toggleWebUSB(enable: boolean) {
@@ -947,6 +952,8 @@ export class AudioEngine {
     
     this.tapNode.port.postMessage({ type: 'setup_port', port: channel.port1 }, [channel.port1]);
     this.visWorker.postMessage({ type: 'setup_port', port: channel.port2 }, [channel.port2]);
+
+    this.attachedCanvas = canvas;
   }
 
   private _buildFilterChain(): BiquadFilterNode[] {

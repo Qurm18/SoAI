@@ -72,7 +72,7 @@ export function useAudioPlayer() {
           playPromiseRef.current = promise;
           promise
             .then(() => { setIsPlaying(true); setErrorHeader(null); })
-            .catch((err) => {
+            .catch((err: { name: string; }) => {
               if (err.name !== 'AbortError') {
                 console.error('Playback failed:', err);
                 setErrorHeader('Autoplay blocked or network error.');
@@ -87,7 +87,7 @@ export function useAudioPlayer() {
         }
       }
     } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
+      if ((err as { name: string; }).name !== 'AbortError') {
         console.error('Playback error:', err);
       }
       setIsPlaying(false);
@@ -129,7 +129,7 @@ export function useAudioPlayer() {
   }, []);
 
   const handleEnhancementChange = useCallback((params: Partial<EnhancementParams>) => {
-    setEnhancement(prev => {
+    setEnhancement((prev: any) => {
       const next = { ...prev, ...params };
       engineRef.current?.updateEnhancement(next);
       return next;
@@ -163,9 +163,13 @@ export function useAudioPlayer() {
 
   const setExactSampleRate = useCallback(async (rate: number) => {
     if (engineRef.current && audioRef.current) {
+      const wasPlaying = !audioRef.current.paused;
       await engineRef.current.reinitializeAtRate(audioRef.current, rate);
       setAudioContext((engineRef.current as any).context);
       updatePipelineInfo();
+      if (wasPlaying) {
+        audioRef.current.play().catch(console.warn);
+      }
     }
   }, [updatePipelineInfo]);
 

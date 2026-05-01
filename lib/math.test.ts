@@ -7,7 +7,10 @@
  * in the numerical code is caught immediately.
  */
 
-import { describe, it, expect } from 'vitest';
+declare const describe: (name: string, fn: () => void) => void;
+declare const it: (name: string, fn: () => void) => void;
+declare const expect: any;
+
 import {
   clamp, mean, std, variance, linsolve,
   KalmanFilter1D, kalmanSmoothVector, MultiBandKalman,
