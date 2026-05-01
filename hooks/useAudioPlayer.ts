@@ -164,11 +164,21 @@ export function useAudioPlayer() {
   const setExactSampleRate = useCallback(async (rate: number) => {
     if (engineRef.current && audioRef.current) {
       const wasPlaying = !audioRef.current.paused;
+      const currentTime = audioRef.current.currentTime;
+      
       await engineRef.current.reinitializeAtRate(audioRef.current, rate);
       setAudioContext((engineRef.current as any).context);
       updatePipelineInfo();
+      
       if (wasPlaying) {
-        audioRef.current.play().catch(console.warn);
+        try {
+          // Restore playback position and resume
+          await new Promise(resolve => setTimeout(resolve, 100));
+          audioRef.current!.currentTime = currentTime;
+          await audioRef.current!.play();
+        } catch (e) {
+          console.warn('Failed to resume playback after sample rate change:', e);
+        }
       }
     }
   }, [updatePipelineInfo]);
