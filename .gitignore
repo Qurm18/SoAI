@@ -1,0 +1,2 @@
+# DEV-06: TypeScript incremental build cache
+tsconfig.tsbuildinfo

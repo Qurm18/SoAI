@@ -1,0 +1,6 @@
+{
+  "name": "Sonic AI: Intelligent Equalizer",
+  "description": "A professional-grade parametric equalizer with on-device math (Kalman, polynomial regression, mutual information, dynamic-Q optimisation, parabolic peak detection) that fine-tunes 10 EQ bands to your personal hearing preferences. Zero external AI dependencies.",
+  "requestFramePermissions": ["microphone", "usb"],
+  "majorCapabilities": []
+}

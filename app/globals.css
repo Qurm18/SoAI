@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+/* ─── Base ─────────────────────────────────────────────────────────────── */
+
+html, body {
+  background: #07080a;
+  color: #e6e7ea;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Custom scrollbar (dark, slim) ────────────────────────────────────── */
+
+.sonic-scroll::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-auto::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.sonic-scroll::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track,
+.overflow-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sonic-scroll::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb,
+.overflow-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+.sonic-scroll::-webkit-scrollbar-thumb:hover,
+.overflow-y-auto::-webkit-scrollbar-thumb:hover,
+.overflow-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(242, 125, 38, 0.35);
+}
+
+/* ─── Range slider (horizontal) ────────────────────────────────────────── */
+
+input[type="range"].sonic-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: linear-gradient(to right,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.08) 100%);
+  border-radius: 999px;
+  outline: none;
+}
+input[type="range"].sonic-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #F27D26;
+  box-shadow: 0 4px 12px rgba(242, 125, 38, 0.45);
+  cursor: pointer;
+  transition: transform 120ms ease;
+}
+input[type="range"].sonic-range::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+input[type="range"].sonic-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #F27D26;
+  box-shadow: 0 4px 12px rgba(242, 125, 38, 0.45);
+  cursor: pointer;
+}
+
+/* Default accent for vanilla range inputs (volume etc.) */
+input[type="range"] {
+  accent-color: #F27D26;
+}
+
+/* ─── Number input arrows (hide them) ──────────────────────────────────── */
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ─── Glass card utility ───────────────────────────────────────────────── */
+
+.sonic-glass {
+  background: rgba(21, 22, 25, 0.65);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Ambient blob background (fixed, subtle) ──────────────────────────── */
+
+.sonic-aurora {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.sonic-aurora::before,
+.sonic-aurora::after {
+  content: "";
+  position: absolute;
+  width: 60vmax;
+  height: 60vmax;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  animation: sonic-drift 22s ease-in-out infinite alternate;
+}
+.sonic-aurora::before {
+  background: radial-gradient(closest-side, #F27D26 0%, transparent 70%);
+  top: -20vmax;
+  left: -20vmax;
+}
+.sonic-aurora::after {
+  background: radial-gradient(closest-side, #6366f1 0%, transparent 70%);
+  bottom: -25vmax;
+  right: -20vmax;
+  animation-direction: alternate-reverse;
+  animation-duration: 28s;
+}
+@keyframes sonic-drift {
+  0%   { transform: translate(0, 0)    scale(1); }
+  50%  { transform: translate(8vmax, -4vmax) scale(1.15); }
+  100% { transform: translate(-6vmax, 6vmax) scale(0.95); }
+}
+
+/* ─── Subtle film-grain noise overlay ──────────────────────────────────── */
+
+.sonic-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+}
+
+/* ─── Pulse ring (used for play / activity indicators) ─────────────────── */
+
+@keyframes sonic-pulse {
+  0%   { transform: scale(0.85); opacity: 0.75; }
+  70%  { transform: scale(1.6);  opacity: 0;    }
+  100% { transform: scale(1.6);  opacity: 0;    }
+}
+.sonic-pulse {
+  animation: sonic-pulse 1.8s ease-out infinite;
+}
+
+/* ─── Marquee (for the footer status strip) ────────────────────────────── */
+
+@keyframes sonic-marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.sonic-marquee {
+  display: inline-flex;
+  gap: 3rem;
+  animation: sonic-marquee 60s linear infinite;
+}
+
+/* ─── Selection ────────────────────────────────────────────────────────── */
+
+::selection {
+  background: rgba(242, 125, 38, 0.35);
+  color: #fff;
+}
+
+/* ─── Reduce motion respect ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .sonic-aurora::before,
+  .sonic-aurora::after,
+  .sonic-pulse,
+  .sonic-marquee {
+    animation: none !important;
+  }
+}
